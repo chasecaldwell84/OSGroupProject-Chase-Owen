@@ -1,7 +1,7 @@
 #include "monte.h"
 #include <iostream>
 #include <chrono>
-#include <cstdlib>
+#include <random>
 
 using namespace std;
 
@@ -10,11 +10,12 @@ MonteCarlo::MonteCarlo(const ::config& config_value) {
 }
 
 double MonteCarlo::sequentialEstimate(){
-    srand((unsigned int)config.seed);
+    mt19937 gen((unsigned int)config.seed);
+    uniform_real_distribution<double> dist(0.0, 1.0);
     unsigned int inside = 0;
     for (unsigned int i = 0; i < config.size; i++) {
-        double x = (double)rand() / RAND_MAX;
-        double y = (double)rand() / RAND_MAX;
+        double x = dist(gen);
+        double y = dist(gen);
         if (x * x + y * y <= 1.0) {
             inside++;
         }
