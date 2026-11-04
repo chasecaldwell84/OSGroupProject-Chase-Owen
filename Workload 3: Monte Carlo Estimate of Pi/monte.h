@@ -25,6 +25,7 @@ public:
 
 private:
 
+    static void threadWorker(unsigned int seed, unsigned int count, unsigned int* out);
     double sequentialEstimate();
     double threadEstimate();
     double MPIestimate();

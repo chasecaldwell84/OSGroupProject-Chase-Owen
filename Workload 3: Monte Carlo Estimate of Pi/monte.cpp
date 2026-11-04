@@ -2,6 +2,8 @@
 #include <iostream>
 #include <chrono>
 #include <random>
+#include <thread>
+#include <vector>
 
 using namespace std;
 
@@ -23,9 +25,44 @@ double MonteCarlo::sequentialEstimate(){
     return 4.0 * inside / config.size;
 }
 
-double MonteCarlo::threadEstimate(){
-    return 0.0;
+void MonteCarlo::threadWorker(unsigned int seed, unsigned int count, unsigned int* out){
+    mt19937 gen(seed);
+    uniform_real_distribution<double> dist(0.0, 1.0);
+    unsigned int local = 0;
+    for (unsigned int i = 0; i < count; i++) {
+        double x = dist(gen);
+        double y = dist(gen);
+        if (x * x + y * y <= 1.0) {
+            local++;
+        }
+    }
+    // CRITICAL SECTION!!!!!!!! :)
+    
+    *out = local;
 }
+
+double MonteCarlo::threadEstimate(){
+    int t = config.threads;
+    vector<unsigned int> inside(t, 0);
+    vector<thread> workers;
+
+    for (int id = 0; id < t; id++) {
+        unsigned int count = config.size / t;
+        if ((unsigned int)id < config.size % t) {
+            count++;
+        }
+        workers.push_back(thread(&MonteCarlo::threadWorker, (unsigned int)config.seed + id, count, &inside[id]));
+    }
+    for (int id = 0; id < t; id++) {
+        workers[id].join();
+    }
+    unsigned int total = 0;
+    for (int id = 0; id < t; id++) {
+        total += inside[id];
+    }
+    return 4.0 * total / config.size;
+}
+
 double MonteCarlo::MPIestimate(){
     return 0.0;
 }
@@ -39,7 +76,7 @@ output MonteCarlo::run() {
     double total_time = 0.0;
 
     for (int rep = 0; rep < config.repetitions; rep++) {
-        auto start = chrono::steady_clock::now();
+        chrono::steady_clock::time_point start = chrono::steady_clock::now();
         if (config.mode == SEQUENTIAL) {
             result.result = sequentialEstimate();
         } else if (config.mode == STD_THREAD) {
@@ -49,7 +86,7 @@ output MonteCarlo::run() {
         } else if (config.mode == OPENMP) {
             result.result = OPENMPestimate();
         }
-        auto end = chrono::steady_clock::now();
+        chrono::steady_clock::time_point end = chrono::steady_clock::now();
 
         double ms = chrono::duration<double, milli>(end - start).count();
         total_time += ms;
