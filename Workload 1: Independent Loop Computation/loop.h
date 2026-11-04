@@ -25,10 +25,10 @@ public:
 
 private:
 
-    double sequentialEstimate();
-    double threadEstimate();
-    double MPIestimate();
-    double OPENMPestimate();
+    double* sequentialEstimate();
+    double* threadEstimate();
+    double* MPIestimate();
+    double* OPENMPestimate();
 };
 
 
