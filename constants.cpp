@@ -1,15 +1,43 @@
 #include "constants.h"
+#include <sstream>
 
-void getconfig(config& config, istream& pin) {
-    pin >> config.workload;
-    pin >> config.mode;
-    pin >> config.size;
-    pin >> config.threads;
-    pin >> config.processes;
-    pin >> config.schedule;
-    pin >> config.chunk;
-    pin >> config.seed;
-    pin >> config.repetitions;
+bool getconfig(config& config, istream& pin) {
+    stringstream input;
+    input << pin.rdbuf();
+    string label;
+
+    input >> label;
+    if (label != "WORKLOAD" || !(input >> config.workload)) return false;
+
+    input >> label;
+    if (label != "MODE" || !(input >> config.mode)) return false;
+
+    input >> label;
+    if (config.mode == TRACE) { // MODEL is only there for TRACE
+        if (label != "MODEL" || !(input >> config.model)) return false;
+        input >> label;
+    }
+    if (label != "SIZE" || !(input >> config.size) || config.size <= 0) return false;
+
+    input >> label;
+    if (label != "THREADS" || !(input >> config.threads) || config.threads <= 0) return false;
+
+    input >> label;
+    if (label != "PROCESSES" || !(input >> config.processes) || config.processes <= 0) return false;
+
+    input >> label;
+    if (label != "SCHEDULE" || !(input >> config.schedule)) return false;
+
+    input >> label;
+    if (label != "CHUNK" || !(input >> config.chunk) || config.chunk <= 0) return false;
+
+    input >> label;
+    if (label != "SEED" || !(input >> config.seed)) return false;
+
+    input >> label;
+    if (label != "REPETITIONS" || !(input >> config.repetitions) || config.repetitions <= 0) return false;
+
+    return !(input >> label); 
 }
 
 void printconfig(const config& config, ostream& pout) {

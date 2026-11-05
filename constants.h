@@ -33,6 +33,7 @@ REPETITIONS 5
 struct config {
     string workload;
     string mode;
+    string model;
     int size;
     int threads;
     int processes;
@@ -43,7 +44,7 @@ struct config {
 };
 
 
-void getconfig(config& config, istream& pin);
+bool getconfig(config& config, istream& pin);
 
 void printconfig(const config& config, ostream& pout);
 

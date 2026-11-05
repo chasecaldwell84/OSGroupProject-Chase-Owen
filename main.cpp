@@ -56,7 +56,10 @@ output run(const config& config){
 int main() {
     config input;
     output result;
-    getconfig(input, cin);
+    if (!getconfig(input, cin)) {
+        cout << "INVALID_INPUT" << endl;
+        return 0;
+    }
     printconfig(input, cout);
     result = run(input);
     printoutput(result, cout);
