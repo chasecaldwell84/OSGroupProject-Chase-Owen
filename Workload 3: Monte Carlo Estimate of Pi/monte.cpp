@@ -4,6 +4,7 @@
 #include <random>
 #include <thread>
 #include <vector>
+#include <omp.h>
 
 using namespace std;
 
@@ -67,7 +68,21 @@ double MonteCarlo::MPIestimate(){
     return 0.0;
 }
 double MonteCarlo::OPENMPestimate(){
-    return 0.0;
+    unsigned int inside = 0;
+    #pragma omp parallel num_threads(config.threads) reduction(+:inside)
+    {
+        mt19937 gen((unsigned int)config.seed + omp_get_thread_num());
+        uniform_real_distribution<double> dist(0.0, 1.0);
+        #pragma omp for
+        for (int i = 0; i < config.size; i++) {
+            double x = dist(gen);
+            double y = dist(gen);
+            if (x * x + y * y <= 1.0) {
+                inside++;
+            }
+        }
+    }
+    return 4.0 * inside / config.size;
 }
 
 
