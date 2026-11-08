@@ -39,6 +39,8 @@ output run(const config& config){
     result.size = config.size;
     if (config.mode == MPI) {
         result.workers = config.processes;
+    } else if (config.mode == SEQUENTIAL) {
+        result.workers = 1;
     } else {
         result.workers = config.threads;
     }
