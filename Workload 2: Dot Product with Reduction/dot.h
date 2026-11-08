@@ -4,7 +4,7 @@
 using namespace std;
 
 /*
-    The config DotProduct will recieve from the main
+    The config Montecarlo will recieve from the main 
     struct config {
     string workload;
     string mode;
@@ -14,12 +14,12 @@ using namespace std;
     string schedule;
     int chunk;
     int seed;
-    int repetitions;
+    int repetitions;  
 };
 */
-class DotProduct {
+class Dot {
 public:
-    DotProduct(const config& config);
+    Dot(const config& config);
     config config;
     output run();
 
