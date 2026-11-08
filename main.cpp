@@ -28,7 +28,7 @@ output run(const config& config){
         Loop loop(config);
         result = loop.run();
     } else if (config.workload == DOT) {
-        DotProduct dot(config);
+        Dot dot(config);
         result = dot.run();
     } else if (config.workload == PI) {
         MonteCarlo monte(config);
