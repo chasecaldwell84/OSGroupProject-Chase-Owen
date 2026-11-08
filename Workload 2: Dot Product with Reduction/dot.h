@@ -2,6 +2,7 @@
 #define DOT_H
 #include "../constants.h"
 #include <cstdint>
+#include <vector>
 using namespace std;
 
 /*
