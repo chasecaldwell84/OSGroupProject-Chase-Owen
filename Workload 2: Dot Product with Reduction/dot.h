@@ -1,6 +1,7 @@
 #ifndef DOT_H
 #define DOT_H
 #include "../constants.h"
+#include <vector>
 using namespace std;
 
 /*
