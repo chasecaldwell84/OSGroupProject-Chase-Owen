@@ -309,3 +309,39 @@ Workload 3 folder.
 
 **Result or outcome**
 monte carlo basic validation done.
+
+## DOT Sequential and OpenMP Implementation
+
+Date 11/08/2026
+Author Chase Caldwell
+Milestone 2: Sequential and Shared-Memory Baselines
+
+**What happened or what we did**
+
+Implemented the sequential and OpenMP versions of the DOT workload and tested them against each other to verify correctness and performance.
+
+**Details**
+
+- Replaced the original sequentialEstimate function, which still contained Monte Carlo Pi code, with the correct dot-product calculation.
+- Added deterministic `dotA()` and `dotB()` functions that generate the same input values based on the index and seed.
+- Implemented `OPENMPestimate()` using a parallel for loop with reduction to combine partial sums without race conditions.
+- Added STATIC, CYCLIC, and DYNAMIC scheduling support.
+- Added basic validation by comparing the OpenMP result against the sequential result.
+- Fixed the sequential worker count, which was incorrectly reporting the configured thread count instead of 1.
+- Had trouble compiling OpenMP using AppleClang on macOS. Switched to Homebrew LLVM and Ninja.
+- Fixed a compilation error caused by a missing chrono header.
+- Resolved a Git merge conflict in dot.h and merged the changes into the repository's main branch.
+
+**Testing**
+
+- Tested with SIZE 1000, THREADS 4, SEED 12345, and REPETITIONS 3.
+- Sequential and OpenMP returned 30000 with VALID: YES.
+- STATIC, CYCLIC, and DYNAMIC scheduling all returned the correct result.
+- Tested with SIZE 1000000, THREADS 4, SCHEDULE STATIC, and REPETITIONS 5.
+- OpenMP achieved approximately 3.05x speedup with four threads.
+- Parallel efficiency was approximately 76.3%.
+- OpenMP performed worse on the smaller workload because thread and scheduling overhead was significant compared to the amount of computation.
+
+**Result or outcome**
+
+Sequential DOT and OpenMP DOT are working and produce matching results. All three OpenMP scheduling methods passed the basic correctness tests. Changes were committed and merged into the fork's main branch for integration with Owen's std::thread implementation.
