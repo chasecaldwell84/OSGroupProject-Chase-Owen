@@ -1,5 +1,5 @@
 /*
-#include "Workload 1: Independent Loop Computation/loop.h"
+#include "Workload 1 - Independent Loop Computation/loop.h"
 #include <iostream>
 
 int main() {

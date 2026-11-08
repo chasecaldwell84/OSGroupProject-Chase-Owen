@@ -1,6 +1,6 @@
-#include "Workload 1: Independent Loop Computation/loop.h"
-#include "Workload 2: Dot Product with Reduction/dot.h"
-#include "Workload 3: Monte Carlo Estimate of Pi/monte.h"
+#include "Workload 1 - Independent Loop Computation/loop.h"
+#include "Workload 2 - Dot Product with Reduction/dot.h"
+#include "Workload 3 - Monte Carlo Estimate of Pi/monte.h"
 #include <iostream>
 #include <string>
 using namespace std;

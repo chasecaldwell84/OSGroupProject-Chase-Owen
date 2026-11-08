@@ -62,7 +62,7 @@ Added the proposed class/module design diagram to the Milestone 1 design proposa
 
 - Diagram of the module design  section of Milestone 1
 
-![module design](../Milestone%201:%20Design%20Proposal%09/images/moduledesign.png)
+![module design](../Milestone%201%20-%20Design%20Proposal/images/moduledesign.png)
 
 **Milestone 1 design proposal completed
 
@@ -96,7 +96,7 @@ setup of processes varying
 
 - Diagram of the module design  section of Milestone 1
 
-![updated module design](../Milestone%201:%20Design%20Proposal%09/images/updatedmoduledesign.png)
+![updated module design](../Milestone%201%20-%20Design%20Proposal/images/updatedmoduledesign.png)
 
 
 **Workload files, shared config, and Monte Carlo skeleton

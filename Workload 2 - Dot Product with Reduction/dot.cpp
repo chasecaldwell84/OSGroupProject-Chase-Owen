@@ -1,4 +1,5 @@
 #include "dot.h"
+#include <chrono>
 #include <iostream>
 #include <cstdlib>
 #include <chrono>
