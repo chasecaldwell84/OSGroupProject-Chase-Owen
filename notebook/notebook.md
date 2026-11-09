@@ -310,6 +310,7 @@ Workload 3 folder.
 **Result or outcome**
 monte carlo basic validation done.
 
+
 ## DOT Sequential and OpenMP Implementation
 
 Date 11/08/2026
@@ -358,3 +359,48 @@ Created a thread worker function that accepted threads for all three workflows, 
 tested all three schedule types with various sizes, including sizes that did not divide easily by chunk size. all results came back valid.
 
 **result:** the dot product workflow now has 2 of the three required workflows functional and all changes are integrated into the overarching codebase.
+
+**LOOP std::thread design
+
+Date 11/5/2026
+Author Jonah Beck
+Milestone 2: Sequential and Shared-Memory Baselines
+| Type | Design decision / Pseudocode |
+
+**What happened or what we did**
+- Each thread writes its own indices and its own partial[k], so no mutex is needed.
+-   STATIC: thread k gets block [k*ceil(n/t), (k+1)*ceil(n/t))
+-   CYCLIC: thread k gets chunks k, k+t, k+2t, ...
+-   DYNAMIC: threads grab the next chunk from an atomic counter (fetch_add) join all threads, then ad up partial[]
+
+**Result or outcome**
+Implemented in threadEstimate().
+
+**LOOP std::thread test
+
+Date 
+Author Jonah Beck
+Milestone 2: Sequential and Shared-Memory Baselines
+| Type | Test (pass or fail) |
+
+**What happened or what we did**
+Ran all three schedules with 1, 2, 3, 4, 7 threads (SIZE 1000000, CHUNK 1000).
+Expected the same checksum and VALID YES for all.
+
+**Result or outcome**
+-STATIC  threads=1  checksum=499896499668  avg_ms=0.790242  valid=YES
+-STATIC  threads=2  checksum=499896499668  avg_ms=0.524785  valid=YES
+-STATIC  threads=3  checksum=499896499668  avg_ms=0.315976  valid=YES
+-STATIC  threads=4  checksum=499896499668  avg_ms=0.262825  valid=YES
+-STATIC  threads=7  checksum=499896499668  avg_ms=0.236824  valid=YES
+-CYCLIC  threads=1  checksum=499896499668  avg_ms=0.787289  valid=YES
+-CYCLIC  threads=2  checksum=499896499668  avg_ms=0.430814  valid=YES
+-CYCLIC  threads=3  checksum=499896499668  avg_ms=0.302382  valid=YES
+-CYCLIC  threads=4  checksum=499896499668  avg_ms=0.278333  valid=YES
+-CYCLIC  threads=7  checksum=499896499668  avg_ms=0.525054  valid=YES
+-DYNAMIC  threads=1  checksum=499896499668  avg_ms=0.878503  valid=YES
+-DYNAMIC  threads=2  checksum=499896499668  avg_ms=0.542355  valid=YES
+-DYNAMIC  threads=3  checksum=499896499668  avg_ms=0.392225  valid=YES
+-DYNAMIC  threads=4  checksum=499896499668  avg_ms=0.293876  valid=YES
+-DYNAMIC  threads=7  checksum=499896499668  avg_ms=0.304128  valid=YES
+
