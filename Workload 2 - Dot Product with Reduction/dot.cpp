@@ -2,7 +2,8 @@
 #include <chrono>
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
+#include <atomic>
+#include <thread>
 #include <omp.h>
 #include <stdexcept>
 
@@ -11,20 +12,6 @@ using namespace std;
 Dot::Dot(const ::config& config_value) {
     this->config = config_value;
 }
-/*
-double Dot::sequentialEstimate(){
-    srand((unsigned int)config.seed);
-    unsigned int inside = 0;
-    for (unsigned int i = 0; i < config.size; i++) {
-        double x = (double)rand() / RAND_MAX;
-        double y = (double)rand() / RAND_MAX;
-        if (x * x + y * y <= 1.0) {
-            inside++;
-        }
-    }
-    return 4.0 * inside / config.size;
-}*/
-
 
 double Dot::sequentialEstimate() {
     double sum = 0.0;
@@ -38,10 +25,88 @@ double Dot::sequentialEstimate() {
 
     return sum;
 }
+//calculates sum for specified index
+long Dot::rangeSum(long start, long end) {
+    long sum = 0;
+    for (long i = start; i < end; i++) {
+        double a = dotA(i, config.seed);
+        double b = dotB(i, config.seed);
+        sum += a * b;
+    }
+    return sum;
+}
 
+void Dot::threadWorker(int id, atomic<long>* next, long* slot) {
+    long size = config.size;
+    long chunk = config.chunk;
+    long threads = config.threads;
+    long sum = 0;
+    long start = 0;
+    long end = 0;
+
+    if (config.schedule == STATIC) {
+        long split = size / threads;
+        long remainder = size % threads;
+        start = split * id;
+        if (id < remainder) {
+            start += id;
+        }
+        else {
+            start += remainder;
+        }
+        end = start + split;
+        if (id < remainder) {
+            end += 1;
+        }
+        sum = rangeSum(start, end);
+    }
+    else if (config.schedule == CYCLIC) {
+        vector<long> idxs;
+        start = id * chunk;
+        while (start < size) {
+            end = start + min(size - start, chunk);
+            idxs.push_back(start);
+            idxs.push_back(end);
+            start += chunk * threads;
+        }
+        for (long i = 0; i < idxs.size(); i+=2) {
+            sum += rangeSum(idxs[i], idxs[i+1]);
+        }
+    }
+    else if (config.schedule == DYNAMIC) {
+        while (true) {
+            start = next->fetch_add(chunk);
+            if (start >= size) {break;}
+            end = start + min(size - start, chunk);
+            sum += rangeSum(start, end);
+        }
+    }
+    else {
+        throw std::invalid_argument("Invalid schedule");
+    }
+
+    *slot = sum;
+}
 
 double Dot::threadEstimate(){
-    return 0.0;
+    unsigned int t = config.threads;
+    unsigned int s = config.size / t;
+    unsigned int r = config.size % t;
+    vector<long> results(t, 0);
+    vector<thread> workers;
+    atomic<long> next(0);
+
+    for (int i = 0; i < t; i++) {
+        workers.push_back(thread(&Dot::threadWorker, this, i,  &next, &results[i]));
+        }
+        for (int i = 0; i < t; i++) {
+            workers[i].join();
+        }
+        long ans = 0;
+        for (long result : results) {
+           ans += result;
+        }
+        return ans;
 }
 double Dot::MPIestimate(){
     return 0.0;
@@ -120,7 +185,7 @@ output Dot::run() {
 
     result.workers = (config.mode == SEQUENTIAL) ? 1 : config.threads;
 
-    if (config.mode == SEQUENTIAL || config.mode == OPENMP) {
+    if (config.mode == SEQUENTIAL || config.mode == OPENMP || config.mode == STD_THREAD) {
         double expected = sequentialEstimate();
         result.valid = (result.result == expected);
         result.checksum = result.result;

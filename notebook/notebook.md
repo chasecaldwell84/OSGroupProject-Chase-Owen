@@ -345,3 +345,16 @@ Implemented the sequential and OpenMP versions of the DOT workload and tested th
 **Result or outcome**
 
 Sequential DOT and OpenMP DOT are working and produce matching results. All three OpenMP scheduling methods passed the basic correctness tests. Changes were committed and merged into the fork's main branch for integration with Owen's std::thread implementation.
+## DOT Threaded Implementation
+Date 11/08/2026
+Author: Owen Chipman
+Workflow: STD_THREAD implementation for dot product.
+
+**what was accomplished:**
+integrated the threaded workflow with the existing code provided by chase.
+Created a thread worker function that accepted threads for all three workflows, branching on each schedule type.
+
+**testing:**
+tested all three schedule types with various sizes, including sizes that did not divide easily by chunk size. all results came back valid.
+
+**result:** the dot product workflow now has 2 of the three required workflows functional and all changes are integrated into the overarching codebase.
