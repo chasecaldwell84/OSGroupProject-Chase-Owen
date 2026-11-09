@@ -338,18 +338,18 @@ Ran all three schedules with 1, 2, 3, 4, 7 threads (SIZE 1000000, CHUNK 1000).
 Expected the same checksum and VALID YES for all.
 
 **Result or outcome**
-STATIC  threads=1  checksum=499896499668  avg_ms=0.790242  valid=YES
-STATIC  threads=2  checksum=499896499668  avg_ms=0.524785  valid=YES
-STATIC  threads=3  checksum=499896499668  avg_ms=0.315976  valid=YES
-STATIC  threads=4  checksum=499896499668  avg_ms=0.262825  valid=YES
-STATIC  threads=7  checksum=499896499668  avg_ms=0.236824  valid=YES
-CYCLIC  threads=1  checksum=499896499668  avg_ms=0.787289  valid=YES
-CYCLIC  threads=2  checksum=499896499668  avg_ms=0.430814  valid=YES
-CYCLIC  threads=3  checksum=499896499668  avg_ms=0.302382  valid=YES
-CYCLIC  threads=4  checksum=499896499668  avg_ms=0.278333  valid=YES
-CYCLIC  threads=7  checksum=499896499668  avg_ms=0.525054  valid=YES
-DYNAMIC  threads=1  checksum=499896499668  avg_ms=0.878503  valid=YES
-DYNAMIC  threads=2  checksum=499896499668  avg_ms=0.542355  valid=YES
-DYNAMIC  threads=3  checksum=499896499668  avg_ms=0.392225  valid=YES
-DYNAMIC  threads=4  checksum=499896499668  avg_ms=0.293876  valid=YES
-DYNAMIC  threads=7  checksum=499896499668  avg_ms=0.304128  valid=YES
+-STATIC  threads=1  checksum=499896499668  avg_ms=0.790242  valid=YES
+-STATIC  threads=2  checksum=499896499668  avg_ms=0.524785  valid=YES
+-STATIC  threads=3  checksum=499896499668  avg_ms=0.315976  valid=YES
+-STATIC  threads=4  checksum=499896499668  avg_ms=0.262825  valid=YES
+-STATIC  threads=7  checksum=499896499668  avg_ms=0.236824  valid=YES
+-CYCLIC  threads=1  checksum=499896499668  avg_ms=0.787289  valid=YES
+-CYCLIC  threads=2  checksum=499896499668  avg_ms=0.430814  valid=YES
+-CYCLIC  threads=3  checksum=499896499668  avg_ms=0.302382  valid=YES
+-CYCLIC  threads=4  checksum=499896499668  avg_ms=0.278333  valid=YES
+-CYCLIC  threads=7  checksum=499896499668  avg_ms=0.525054  valid=YES
+-DYNAMIC  threads=1  checksum=499896499668  avg_ms=0.878503  valid=YES
+-DYNAMIC  threads=2  checksum=499896499668  avg_ms=0.542355  valid=YES
+-DYNAMIC  threads=3  checksum=499896499668  avg_ms=0.392225  valid=YES
+-DYNAMIC  threads=4  checksum=499896499668  avg_ms=0.293876  valid=YES
+-DYNAMIC  threads=7  checksum=499896499668  avg_ms=0.304128  valid=YES
